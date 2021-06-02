@@ -18,6 +18,8 @@ class PostController {
 		const id = randomBytes(8).toString("hex");
 		const post = { id, title, description };
 
+		const result = await this.postService.addPost(post);
+
 		await axios.post("http://localhost:4005/events", {
 			type: "NEW_POST_CREATED",
 			data: {
@@ -27,7 +29,6 @@ class PostController {
 			},
 		});
 
-		const result = await this.postService.addPost(post);
 		return res.status(201).json(result);
 	}
 }
