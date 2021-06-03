@@ -27,7 +27,7 @@ router.post('/posts', (req: Request, res: Response) => {
 
 router.post("/events", (req: Request, res: Response) => {
 	const event = req.body as Event;
-	console.log("Received Event", event.type);
+	console.log("Received Event", event);
 
 	res.send();
 });
