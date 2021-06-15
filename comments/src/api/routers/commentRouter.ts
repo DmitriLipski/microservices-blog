@@ -9,7 +9,7 @@ type Event = {
 	data: any;
 };
 
-//TODO: Replace with common event type
+//TODO: Replace with _common event type
 enum EventType {
 	COMMENT_CREATED = 'COMMENT_CREATED',
 	COMMENT_UPDATED = 'COMMENT_UPDATED',

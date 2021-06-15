@@ -1,9 +1,9 @@
 import { Service } from 'typedi';
-import { Event } from '../models/Event';
+import { Event } from '../../../_common/types';
 
 @Service()
 class EventsRepository {
-	private events: Event[] = [{ id: 'bfccd1b38422094d', type: 'POST_CREATED' }];
+	private events: Event[] = [];
 
 	async getAllEvents(): Promise<Event[]> {
 		return Promise.resolve(this.events);

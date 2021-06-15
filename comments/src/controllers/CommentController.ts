@@ -4,6 +4,7 @@ import { randomBytes } from 'crypto';
 import { Service } from 'typedi';
 import { CommentService } from '../services/CommentService';
 import { Comment } from '../models/Comment';
+import { EventTypes } from '../../../_common/types';
 
 @Service()
 class CommentController {
@@ -22,7 +23,7 @@ class CommentController {
 		const result = await this.commentService.addComment(postId, comment);
 
 		await axios.post('http://localhost:4005/events', {
-			type: 'NEW_COMMENT_CREATED',
+			type: EventTypes.NEW_COMMENT_CREATED,
 			data: {
 				id,
 				postId,

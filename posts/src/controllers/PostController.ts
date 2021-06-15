@@ -4,6 +4,7 @@ import { randomBytes } from 'crypto';
 import { Service } from 'typedi';
 import { PostService } from '../services/PostService';
 import { Post } from '../models/Post';
+import { EventTypes } from '../../../_common/types';
 
 @Service()
 class PostController {
@@ -21,7 +22,7 @@ class PostController {
 		const result = await this.postService.addPost(post);
 
 		await axios.post("http://localhost:4005/events", {
-			type: "NEW_POST_CREATED",
+			type: EventTypes.NEW_POST_CREATED,
 			data: {
 				id,
 				title,

@@ -15,6 +15,10 @@ class CommentRepository {
 	}
 
 	async addComment(postId: string, comment: Comment): Promise<Comment> {
+		if (!this.commentsById[postId]) {
+			this.commentsById[postId] = [];
+		}
+
 		this.commentsById[postId].push(comment);
 		return Promise.resolve(comment);
 	}
