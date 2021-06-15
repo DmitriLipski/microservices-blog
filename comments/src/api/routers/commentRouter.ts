@@ -17,12 +17,12 @@ enum EventType {
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 router.get('/posts/:id/comments', (req: Request, res: Response) => {
-	return commentController.getAllPosts(req, res);
+	return commentController.getAllComments(req, res);
 });
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 router.post('/posts/:id/comments', (req: Request, res: Response) => {
-	return commentController.addPost(req, res);
+	return commentController.addComment(req, res);
 });
 
 router.post('/events', (req: Request, res: Response) => {

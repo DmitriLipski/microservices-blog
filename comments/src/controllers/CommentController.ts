@@ -7,19 +7,19 @@ import { Comment } from '../models/Comment';
 
 @Service()
 class CommentController {
-	constructor(private readonly postService: CommentService) {}
-	async getAllPosts(_req: Request, res: Response): Promise<Response> {
-		const result = await this.postService.getAllComments(_req.params.id);
+	constructor(private readonly commentService: CommentService) {}
+	async getAllComments(_req: Request, res: Response): Promise<Response> {
+		const result = await this.commentService.getAllComments(_req.params.id);
 		return res.json(result);
 	}
 
-	async addPost(_req: Request, res: Response): Promise<Response> {
+	async addComment(_req: Request, res: Response): Promise<Response> {
 		const { content } = _req.body as Comment;
 		const id = randomBytes(8).toString('hex');
 		const postId = _req.params.id;
 		const comment = { id, postId, content };
 
-		const result = await this.postService.addComment(postId, comment);
+		const result = await this.commentService.addComment(postId, comment);
 
 		await axios.post('http://localhost:4005/events', {
 			type: 'NEW_COMMENT_CREATED',
