@@ -3,18 +3,18 @@ import axios from 'axios';
 import { randomBytes } from 'crypto';
 import { Service } from 'typedi';
 
-import { PostService, LoggerService, ErrorService } from '../services';
+import { PostService, LoggerService, ErrorService, InvalidPropertyError, MethodNotAllowedError } from '../services';
 import { Post } from '../models/Post';
 
-import { HttpMethods, HttpStatusCode } from '../api/types';
+import { HttpMethods, HttpStatusCode } from '../types';
 import { EventTypes } from '../../../_common/types';
 
 type HttpRequestType<T> = {
-	path: string,
-	method: string,
-	pathParams: Record<string, string | number>,
-	queryParams: any,
-	body?: T
+	path: string;
+	method: string;
+	pathParams: Record<string, string | number>;
+	queryParams: any;
+	body?: T;
 }
 
 type HandleRequestResultType<T> = {
@@ -66,10 +66,7 @@ class PostController {
 			case HttpMethods.POST:
 				return this.addPost(httpRequest);
 			default:
-				return this.errorBuilder.makeHttpError({
-					statusCode: 405,
-					errorMessage: `${httpRequest.method} method not allowed.`
-				})
+				return this.errorBuilder.makeHttpError(new MethodNotAllowedError(`${httpRequest.method} method not allowed.`))
 		}
 	}
 
@@ -84,32 +81,18 @@ class PostController {
 				statusCode: HttpStatusCode.OK,
 				data: result
 			}
-		} catch (e: unknown) {
-			//TODO:
-			if (e instanceof Error) {
-				return this.errorBuilder.makeHttpError({
-					errorMessage: e.message,
-					statusCode: HttpStatusCode.BAD_REQUEST
-				})
-			}
-
-			return this.errorBuilder.makeHttpError({
-				errorMessage: 'Unknown Error',
-				statusCode: HttpStatusCode.INTERNAL_SERVER
-			})
+		} catch (error: unknown) {
+			return this.errorBuilder.makeHttpError(error)
 		}
 	}
 
 	async addPost(httpRequest: HttpRequestType<Post>): Promise<HandleRequestResultType<Post>> {
 		if (!httpRequest.body) {
-			//TODO
-			return this.errorBuilder.makeHttpError({
-				errorMessage: 'Bad Request',
-				statusCode: HttpStatusCode.BAD_REQUEST
-			})
+			return this.errorBuilder.makeHttpError(new InvalidPropertyError('Bad request. No POST body.'))
 		}
 
 		const { title, description } = httpRequest.body;
+
 		const id = randomBytes(8).toString("hex");
 
 		try {
@@ -125,19 +108,8 @@ class PostController {
 				statusCode: HttpStatusCode.OK,
 				data: result
 			}
-		} catch (e: unknown) {
-			//TODO
-			if (e instanceof Error) {
-				return this.errorBuilder.makeHttpError({
-					errorMessage: e.message,
-					statusCode: HttpStatusCode.BAD_REQUEST
-				})
-			}
-
-			return this.errorBuilder.makeHttpError({
-				errorMessage: 'Internal Server Error',
-				statusCode: HttpStatusCode.INTERNAL_SERVER
-			})
+		} catch (error: unknown) {
+			return this.errorBuilder.makeHttpError(error)
 		}
 	}
 
