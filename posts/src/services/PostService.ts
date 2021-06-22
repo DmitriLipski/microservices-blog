@@ -1,7 +1,7 @@
 import { Service } from 'typedi';
 import { Post } from '../models/Post';
 import { PostRepository } from '../repositories/PostRepository';
-import { InvalidPropertyError, requiredParam } from './ErrorService';
+import { InvalidPropertyError, requiredParam } from './ResponseService';
 
 @Service()
 class PostService {

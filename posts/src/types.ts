@@ -14,3 +14,10 @@ export enum HttpMethods {
 	DELETE = 'DELETE',
 	PATCH = 'PATCH'
 }
+
+export type HandleRequestResultType<T = unknown> = {
+	headers?: Record<string, string>;
+	statusCode: number;
+	data?: T | Error;
+	errorMessage?: string;
+}

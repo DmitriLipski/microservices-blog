@@ -1,16 +1,22 @@
 import { Service } from 'typedi';
-import { HttpStatusCode } from '../types';
-
-type HttpErrorType = {
-	statusCode: HttpStatusCode, errorMessage: string
-}
+import { HandleRequestResultType, HttpStatusCode } from '../types';
 
 @Service()
-class ErrorService {
-	makeHttpError(error: unknown): HttpErrorType {
+class ResponseService {
+	makeHttpError(error: unknown): HandleRequestResultType {
 		const statusCode = getStatusCode(error);
 		const errorMessage = getErrorMessage(error);
 		return { statusCode, errorMessage }
+	}
+
+	makeHttpOKResponse<T>(data: T): HandleRequestResultType<T> {
+		return {
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			statusCode: HttpStatusCode.OK,
+			data
+		}
 	}
 }
 
@@ -84,4 +90,4 @@ export class MethodNotAllowedError extends Error {
 	}
 }
 
-export { ErrorService };
+export { ResponseService };

@@ -3,10 +3,10 @@ import axios from 'axios';
 import { randomBytes } from 'crypto';
 import { Service } from 'typedi';
 
-import { PostService, LoggerService, ErrorService, InvalidPropertyError, MethodNotAllowedError } from '../services';
+import { PostService, LoggerService, ResponseService, InvalidPropertyError, MethodNotAllowedError } from '../services';
 import { Post } from '../models/Post';
 
-import { HttpMethods, HttpStatusCode } from '../types';
+import { HandleRequestResultType, HttpMethods } from '../types';
 import { EventTypes } from '../../../_common/types';
 
 type HttpRequestType<T> = {
@@ -17,19 +17,12 @@ type HttpRequestType<T> = {
 	body?: T;
 }
 
-type HandleRequestResultType<T> = {
-	headers?: Record<string, string>;
-	statusCode: number;
-	data?: T | Error;
-	errorMessage?: string;
-}
-
 @Service()
 class PostController {
 	constructor(
 		private readonly postService: PostService,
 		private readonly logger: LoggerService,
-		private readonly errorBuilder: ErrorService
+		private readonly responseService: ResponseService
 	) {}
 
 	adaptRequest(_req: Request): HttpRequestType<Post> {
@@ -59,36 +52,29 @@ class PostController {
 			})
 	}
 
-	async handleRequest(httpRequest: HttpRequestType<Post>): Promise<HandleRequestResultType<Post[] | Post>> {
+	async handleRequest(httpRequest: HttpRequestType<Post>): Promise<HandleRequestResultType<Post[] | Post | unknown>> {
 		switch (httpRequest.method) {
 			case HttpMethods.GET:
 				return this.getAllPosts();
 			case HttpMethods.POST:
 				return this.addPost(httpRequest);
 			default:
-				return this.errorBuilder.makeHttpError(new MethodNotAllowedError(`${httpRequest.method} method not allowed.`))
+				return this.responseService.makeHttpError(new MethodNotAllowedError(`${httpRequest.method} method not allowed.`))
 		}
 	}
 
-	async getAllPosts(): Promise<HandleRequestResultType<Post[]>> {
+	async getAllPosts(): Promise<HandleRequestResultType<Post[] | unknown>> {
 		try {
-			const result = await this.postService.getAllPosts();
-
-			return {
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				statusCode: HttpStatusCode.OK,
-				data: result
-			}
+			const result = await this.postService.getAllPosts() as Post[];
+			return this.responseService.makeHttpOKResponse<Post[]>(result)
 		} catch (error: unknown) {
-			return this.errorBuilder.makeHttpError(error)
+			return this.responseService.makeHttpError(error)
 		}
 	}
 
-	async addPost(httpRequest: HttpRequestType<Post>): Promise<HandleRequestResultType<Post>> {
+	async addPost(httpRequest: HttpRequestType<Post>): Promise<HandleRequestResultType<Post | unknown>> {
 		if (!httpRequest.body) {
-			return this.errorBuilder.makeHttpError(new InvalidPropertyError('Bad request. No POST body.'))
+			return this.responseService.makeHttpError(new InvalidPropertyError('Bad request. No POST body.'))
 		}
 
 		const { title, description } = httpRequest.body;
@@ -101,15 +87,9 @@ class PostController {
 
 			await this.broadcastEvent(post);
 
-			return {
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				statusCode: HttpStatusCode.OK,
-				data: result
-			}
+			return this.responseService.makeHttpOKResponse<Post>(result)
 		} catch (error: unknown) {
-			return this.errorBuilder.makeHttpError(error)
+			return this.responseService.makeHttpError(error)
 		}
 	}
 
