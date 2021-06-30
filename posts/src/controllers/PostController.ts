@@ -7,7 +7,7 @@ import { PostService, LoggerService, ResponseService, InvalidPropertyError, Meth
 import { Post } from '../models/Post';
 
 import { HandleRequestResultType, HttpMethods } from '../types';
-import { EventTypes } from '../../../_common/types';
+import { EventTypes } from '../types';
 
 type HttpRequestType<T> = {
 	path: string;
