@@ -1,7 +1,7 @@
 import { Service } from 'typedi';
 import { EventsRepository } from '../repositories/PostRepository';
 
-import { Event } from '../../../_common/types';
+import { Event } from '../types';
 
 @Service()
 class EventService {

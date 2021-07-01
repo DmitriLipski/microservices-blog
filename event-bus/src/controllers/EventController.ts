@@ -5,7 +5,7 @@ import { randomBytes } from 'crypto';
 import { Service } from 'typedi';
 import { EventService } from '../services/EventService';
 
-import { Event } from '../../../_common/types';
+import { Event } from '../types';
 
 @Service()
 class EventController {
@@ -29,15 +29,16 @@ class EventController {
 	}
 
 	async broadcastEvent(event: Event): Promise<void | AxiosResponse>  {
-		await axios.post<any, any>("http://localhost:4001/events", event).catch((err: Error) => {
+		//Post service
+		await axios.post<any, any>("http://posts-clusterip-srv:4001/events", event).catch((err: Error) => {
 			console.log(err.message);
 		});
-		await axios.post<any, any>("http://localhost:4002/events", event).catch((err: Error) => {
-			console.log(err.message);
-		});
-		await axios.post<any, any>("http://localhost:4003/events", event).catch((err: Error) => {
-			console.log(err.message);
-		});
+		// await axios.post<any, any>("http://localhost:4002/events", event).catch((err: Error) => {
+		// 	console.log(err.message);
+		// });
+		// await axios.post<any, any>("http://localhost:4003/events", event).catch((err: Error) => {
+		// 	console.log(err.message);
+		// });
 	}
 }
 
