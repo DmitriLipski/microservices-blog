@@ -30,15 +30,17 @@ class EventController {
 
 	async broadcastEvent(event: Event): Promise<void | AxiosResponse>  {
 		//Post service
-		await axios.post<any, any>("http://posts-clusterip-srv:4001/events", event).catch((err: Error) => {
+		await axios.post<any, any>(`${process.env.POST_SERVICE_URL || 'localhost:4001'}/events`, event).catch((err: Error) => {
 			console.log(err.message);
 		});
-		// await axios.post<any, any>("http://localhost:4002/events", event).catch((err: Error) => {
-		// 	console.log(err.message);
-		// });
-		// await axios.post<any, any>("http://localhost:4003/events", event).catch((err: Error) => {
-		// 	console.log(err.message);
-		// });
+		//Comment service
+		await axios.post<any, any>(`${process.env.COMMENT_SERVICE_URL || 'localhost:4002'}/events`, event).catch((err: Error) => {
+			console.log(err.message);
+		});
+		//Query service
+		await axios.post<any, any>(`${process.env.QUERY_SERVICE_URL || 'localhost:4003'}/events`, event).catch((err: Error) => {
+			console.log(err.message);
+		});
 	}
 }
 

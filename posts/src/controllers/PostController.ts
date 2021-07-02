@@ -95,7 +95,7 @@ class PostController {
 
 	async broadcastEvent(post: Post): Promise<Post> {
 		try {
-			await axios.post("http://event-bus-srv:4005/events", {
+			await axios.post(`${process.env.EVENT_BUS_SERVICE_URL || 'localhost:4005'}/events`, {
 				type: EventTypes.NEW_POST_CREATED,
 				data: post,
 			});

@@ -6,8 +6,8 @@
 	"author": "",
 	"license": "ISC",
 	"scripts": {
-		"start": "ts-node src/index.ts",
-		"dev": "ts-node-dev src/index.ts",
+		"start": "env-cmd -f ./config/prod.env ts-node src/index.ts",
+		"dev": "env-cmd -f ./config/dev.env ts-node-dev src/index.ts",
 		"build": "tsc",
 		"lint": "eslint --ext .jsx,.js,.tsx,.ts",
 		"prettier": "prettier --ignore-path .gitignore \"**/*.+(ts|js|json)\"",
@@ -30,6 +30,7 @@
 		"@types/node": "15.6.0",
 		"@typescript-eslint/eslint-plugin": "4.24.0",
 		"@typescript-eslint/parser": "4.24.0",
+		"env-cmd": "10.1.0",
 		"eslint": "7.26.0",
 		"eslint-plugin-github": "4.1.3",
 		"eslint-plugin-prettier": "3.4.0",

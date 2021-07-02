@@ -3,8 +3,7 @@ import { Service } from 'typedi';
 import { CommentService, PostService } from '../services';
 import { Post } from '../models/Post';
 import { Comment } from '../models/Comment';
-
-import { Event, EventTypes } from '../../../_common/types';
+import { EventTypes, Event } from '../types';
 
 @Service()
 class QueryController {
