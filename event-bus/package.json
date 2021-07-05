@@ -6,7 +6,7 @@
 	"author": "",
 	"license": "ISC",
 	"scripts": {
-		"start": "env-cmd -f ./config/dev.prod ts-node src/index.ts",
+		"start": "env-cmd -f ./config/prod.env ts-node src/index.ts",
 		"dev": "env-cmd -f ./config/dev.env ts-node-dev src/index.ts",
 		"build": "tsc",
 		"lint": "eslint --ext .jsx,.js,.tsx,.ts",

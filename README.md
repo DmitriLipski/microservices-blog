@@ -15,7 +15,9 @@
 
 ### Cluster management
 - `minikube ip` - find out minikube cluster IP
-- `kubectl describe service posts-srv` -find out TCP port for service
+- `kubectl describe service [posts-srv]` -find out TCP port for service
+- `kubectl describe pod [posts-pod]` - troubleshoot pod
+- `kubectl apply -f .` - apply all deployment files in on directory
 
 ### Get service logs
 - Run `kubectl get pods`
