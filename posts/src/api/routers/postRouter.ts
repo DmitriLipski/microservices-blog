@@ -5,7 +5,12 @@ const router = express.Router();
 const postController = Container.get(PostController);
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
-router.all('/posts', (req: Request, res: Response) => {
+router.get('/posts', (req: Request, res: Response) => {
+	return postController.handlePostRequests(req, res);
+});
+
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
+router.post('/posts/create', (req: Request, res: Response) => {
 	return postController.handlePostRequests(req, res);
 });
 

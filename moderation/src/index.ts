@@ -6,14 +6,11 @@ import app from './app';
 const main = () => {
 	const server = http.createServer(app);
 
-	const port = process.env.PORT || 4003;
+	const port = process.env.PORT || 4004;
 
 	server.listen(port, () => {
-		// eslint-disable-next-line no-console
-		console.log(`${chalk.blue.bold('v0.0.1')}`);
-		// eslint-disable-next-line no-console
 		console.log(
-			`${chalk.yellow.bold('Query')} service is up ${chalk.green.bold(
+			`${chalk.yellow.bold('Moderation')} service is up ${chalk.green.bold(
 				'successfully',
 			)} on port ${chalk.blue.bold(port)}`,
 		);

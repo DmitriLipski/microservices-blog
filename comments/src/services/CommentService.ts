@@ -12,6 +12,10 @@ class CommentService {
 	async addComment(postId: string, comment: Comment): Promise<Comment> {
 		return await this.commentRepository.addComment(postId, comment);
 	}
+
+	async updateComment(postId: string, comment: Comment): Promise<Comment> {
+		return await this.commentRepository.updateComment(postId, comment);
+	}
 }
 
 export { CommentService };

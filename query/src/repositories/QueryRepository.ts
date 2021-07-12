@@ -10,8 +10,8 @@ class QueryRepository {
 			title: 'Post #1',
 			description: 'post 1 description',
 			comments: [
-				{ id: 'fdfdf', postId: '111', content: 'comment content' },
-				{ id: 'asasa', postId: '111', content: 'comment content' },
+				{ id: 'fwfwf', postId: '111', content: 'Comment #1 content', status: null },
+				{ id: 'ghghg', postId: '111', content: 'Comment #2 content', status: null },
 			],
 		},
 		{
@@ -19,8 +19,8 @@ class QueryRepository {
 			title: 'Post #2',
 			description: 'post 2 description',
 			comments: [
-				{ id: 'fdfdf', postId: '222', content: 'comment content' },
-				{ id: 'asasa', postId: '222', content: 'comment content' },
+				{ id: 'fdfdf', postId: '222', content: 'comment content', status: null },
+				{ id: 'asasa', postId: '222', content: 'comment content', status: null },
 			],
 		},
 	];
@@ -44,7 +44,7 @@ class QueryRepository {
 	}
 
 	async updateComment(comment: Comment): Promise<Comment | Error> {
-		const { id, postId, content } = comment;
+		const { id, postId, content, status } = comment;
 		const commentedPost = this.posts.find(post => post.id === postId);
 		if (commentedPost) {
 			const currentComment = commentedPost.comments.find(item => {
@@ -54,6 +54,7 @@ class QueryRepository {
 				return Promise.reject(new Error('Comment not found'));
 			}
 			currentComment.content = content;
+			currentComment.status = status;
 			return Promise.resolve(currentComment);
 		}
 

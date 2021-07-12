@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
-import axios, { AxiosResponse } from 'axios';
+import axios from 'axios';
+// import axios, { AxiosResponse } from 'axios';
 import chalk from 'chalk';
 import { randomBytes } from 'crypto';
 import { Service } from 'typedi';
@@ -23,23 +24,31 @@ class EventController {
 		const event = { id, type, data };
 
 		const result = await this.eventService.addEvent(event);
-		await this.broadcastEvent(event);
+		this.broadcastEvent(event);
 
 		return res.status(201).json(result);
 	}
 
-	async broadcastEvent(event: Event): Promise<void | AxiosResponse>  {
+	broadcastEvent(event: Event): void {
 		//Post service
-		await axios.post<any, any>(`${process.env.POST_SERVICE_URL || 'localhost:4001'}/events`, event).catch((err: Error) => {
-			console.log(err.message);
+		axios.post<any, any>(`${process.env.POST_SERVICE_URL || 'localhost:4001'}/events`, event)
+			.catch((err: Error) => {
+				console.log('Error during Post service notification: ', err.message);
 		});
 		//Comment service
-		await axios.post<any, any>(`${process.env.COMMENT_SERVICE_URL || 'localhost:4002'}/events`, event).catch((err: Error) => {
-			console.log(err.message);
+		axios.post<any, any>(`${process.env.COMMENT_SERVICE_URL || 'localhost:4002'}/events`, event)
+			.catch((err: Error) => {
+				console.log('Error during Comment service notification: ', err.message);
+		});
+		//Moderation service
+		axios.post<any, any>(`${process.env.MODERATION_SERVICE_URL || 'localhost:4004'}/events`, event)
+			.catch((err: Error) => {
+				console.log('Error during Moderation service notification: ', err.message);
 		});
 		//Query service
-		await axios.post<any, any>(`${process.env.QUERY_SERVICE_URL || 'localhost:4003'}/events`, event).catch((err: Error) => {
-			console.log(err.message);
+		axios.post<any, any>(`${process.env.QUERY_SERVICE_URL || 'localhost:4003'}/events`, event)
+			.catch((err: Error) => {
+				console.log('Error during Query service notification: ', err.message);
 		});
 	}
 }

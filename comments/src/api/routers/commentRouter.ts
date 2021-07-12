@@ -25,11 +25,12 @@ router.post('/posts/:id/comments', (req: Request, res: Response) => {
 	return commentController.addComment(req, res);
 });
 
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
 router.post('/events', (req: Request, res: Response) => {
 	const event = req.body as Event;
 	console.log('Received Event', event);
 
-	res.send();
+	return commentController.handleEvent(req, res);
 });
 
 export { router as commentRouter };

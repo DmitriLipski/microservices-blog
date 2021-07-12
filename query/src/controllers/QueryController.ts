@@ -22,6 +22,9 @@ class QueryController {
 		if (event.type === EventTypes.NEW_COMMENT_CREATED) {
 			return await this.addComment(_req, res);
 		}
+		if (event.type === EventTypes.COMMENT_UPDATED) {
+			return await this.updateComment(_req, res);
+		}
 		return res.status(400).json({ message: 'Unsupported event type' });
 	}
 
@@ -42,8 +45,7 @@ class QueryController {
 
 	async addComment(_req: Request, res: Response): Promise<Response> {
 		// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-		const { id, postId, content } = _req.body.data as Comment;
-		const comment = { id, postId, content };
+		const comment = _req.body.data as Comment;
 
 		const result = await this.commentService.addComment(comment);
 
@@ -51,9 +53,8 @@ class QueryController {
 	}
 
 	async updateComment(_req: Request, res: Response): Promise<Response> {
-		const { id, postId, content } = _req.body as Comment;
-		const comment = { id, postId, content };
-
+		const event = _req.body as Event;
+		const comment: Comment = event.data;
 		const result = await this.commentService.updateComment(comment);
 
 		return res.status(201).json(result);
