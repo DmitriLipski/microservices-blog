@@ -1,3 +1,3 @@
 export * from './PostService';
-export * from './LoggerService';
-export * from './ResponseService';
+export * from './common/LoggerService';
+export * from './common/ResponseService';

@@ -1,11 +1,15 @@
 import { Service } from 'typedi';
 import { Post } from '../models/Post';
 import { PostRepository } from '../repositories/PostRepository';
-import { InvalidPropertyError, requiredParam } from './ResponseService';
+import { ErrorService } from './common/ErrorService';
+import { InvalidPropertyError } from './common/errors';
 
 @Service()
 class PostService {
-	constructor(private readonly postRepository: PostRepository) {}
+	constructor(
+		private readonly postRepository: PostRepository,
+		private readonly errorService: ErrorService,
+	) {}
 	async getAllPosts(): Promise<Post[] | Error> {
 		return await this.postRepository.getAllPosts();
 	}
@@ -17,7 +21,7 @@ class PostService {
 	}
 
 	validatePost(postData: Post): Post {
-		const { id, title = requiredParam('title'), description = requiredParam('description') } = postData;
+		const { id, title = this.errorService.requiredParam('title'), description = this.errorService.requiredParam('description') } = postData;
 
 		this.validatePostTitle(title as string);
 		this.validatePostDescription(description as string);

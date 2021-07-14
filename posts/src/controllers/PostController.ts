@@ -3,11 +3,12 @@ import axios from 'axios';
 import { randomBytes } from 'crypto';
 import { Service } from 'typedi';
 
-import { PostService, LoggerService, ResponseService, InvalidPropertyError, MethodNotAllowedError } from '../services';
+import { PostService, LoggerService, ResponseService } from '../services';
 import { Post } from '../models/Post';
 
-import { HandleRequestResultType, HttpMethods } from '../types';
+import { ErrorResponseMessages, HandleRequestResultType, HttpMethods, HttpStatusCode } from '../types';
 import { EventTypes } from '../types';
+import { InvalidPropertyError, MethodNotAllowedError } from '../services/common/errors';
 
 type HttpRequestType<T> = {
 	path: string;
@@ -43,12 +44,12 @@ class PostController {
 					return res
 						.set(headers)
 						.status(statusCode)
-						.send(errorMessage ? { error: errorMessage } : data);
+						.send(errorMessage ? errorMessage : data);
 				}
 			)
 			.catch((error: Error) => {
 				this.logger.logToConsole(error.message);
-				return res.status(500).json({ message: 'Internal Server Error' });
+				return res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json([{ message: ErrorResponseMessages.INTERNAL_SERVER_ERROR }]);
 			})
 	}
 

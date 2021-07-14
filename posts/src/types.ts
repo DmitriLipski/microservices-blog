@@ -1,4 +1,6 @@
 //Event
+import { SerializeErrorsReturnType } from './services/common/errors';
+
 export enum EventTypes {
 	NEW_POST_CREATED = 'NEW_POST_CREATED',
 	NEW_COMMENT_CREATED = 'NEW_COMMENT_CREATED',
@@ -21,6 +23,10 @@ export enum HttpStatusCode {
 	INTERNAL_SERVER_ERROR = 500,
 }
 
+export enum ErrorResponseMessages {
+	INTERNAL_SERVER_ERROR = 'Internal Server Error'
+}
+
 export enum HttpMethods {
 	GET = 'GET',
 	POST = 'POST',
@@ -33,5 +39,5 @@ export type HandleRequestResultType<T = unknown> = {
 	headers?: Record<string, string>;
 	statusCode: number;
 	data?: T | Error;
-	errorMessage?: string;
+	errorMessage?: SerializeErrorsReturnType;
 }

@@ -1,5 +1,8 @@
 # Microservices Blog
 
+## Run Application
+1. `skaffold dev`
+
 ### kubernetes deployment
 1. Set the environment variables with `eval $(minikube docker-env)`
 2. Build the image (ex. posts service) `docker build -t USER_NAME/posts:latest .`
